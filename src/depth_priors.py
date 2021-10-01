@@ -81,8 +81,13 @@ def train(args):
     
     for i in trange(start, N_iters_depth):
         batch = images_train[i_batch:i_batch + N_rand_depth]
+        #print(batch.shape)
         depth_gt, mask_gt = depths_train[i_batch:i_batch + N_rand_depth], depths_mask_train[i_batch:i_batch + N_rand_depth]
         depth_pred = depth_model(batch)
+        #print('------------------------------------------------------')
+        #print(depth_pred)
+        #print(depth_gt)
+        #print(mask_gt)
         loss = compute_depth_loss(depth_pred, depth_gt, mask_gt)
 
         optimizer_depth.zero_grad()

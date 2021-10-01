@@ -104,11 +104,13 @@ def _load_data(basedir, factor=None, width=None, height=None, load_imgs=True):
         with open(os.path.join(basedir, 'test.txt'), 'r') as f_list:
             lines += f_list.readlines()
             
-    imgfiles = [os.path.join(imgdir, f.strip().replace('.jpg', '.png')) for f in lines]
+    imgfiles = [os.path.join(imgdir, f.strip()) for f in lines]
     if poses.shape[-1] != len(imgfiles):
         print( 'Mismatch between imgs {} and poses {} !!!!'.format(len(imgfiles), poses.shape[-1]) )
         return
 
+    print(imgfiles[0])
+    # print(os.path.isfile('/nerf_pl_shared/data/scene0000_01/images_2/1934.png'))
     sh = imageio.imread(imgfiles[0]).shape
     poses[:2, 4, :] = np.array(sh[:2]).reshape([2, 1])
     poses[2, 4, :] = poses[2, 4, :] * 1./factor
@@ -256,6 +258,7 @@ def spherify_poses(poses, bds, N):
 
 def load_llff_data(basedir, factor=8, recenter=True, bd_factor=.75, spherify=False, path_zflat=False, N_views=120):
 
+    print(basedir)
     poses, bds, imgs = _load_data(basedir, factor=factor) # factor=8 downsamples original imgs by 8x
     print('Loaded', basedir, bds.min(), bds.max())
 

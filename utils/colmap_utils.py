@@ -25,6 +25,7 @@ def read_array(path):
     return np.transpose(array, (1, 0, 2)).squeeze()
 
 def load_point_vis(path, masks):
+    # print(path)
     with open(path, 'rb') as f:
         n = struct.unpack('<Q', f.read(8))[0]
         print('point number: {}'.format(n))
