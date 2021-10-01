@@ -620,18 +620,18 @@ def train(args):
             tqdm.write(f"[TRAIN] Iter: {i} Loss: {loss.item()}  PSNR: {psnr.item()}")
             writer.add_scalar("Loss", loss.item(), i)
             writer.add_scalar("PSNR", psnr.item(), i)
-            if i>0:
-                with torch.no_grad():
-                    render_pose = poses_tensor[0]
-                    print('render_pose:', render_pose)
-                    rgb8, depth = render_path_logger(render_pose, hwf, args.chunk, render_kwargs_test, sc=sc,
-                                            depth_priors=torch.from_numpy(depth_priors).to(device),
-                                            depth_confidences=torch.from_numpy(depth_confidences).to(device), 
-                                            savedir=None, render_factor=args.render_factor, 
-                                            image_list=image_list)
-                    # writer.add_image("Image RGB GT")
-                    writer.add_image("Image rendered", rgb8, i)
-                    writer.add_image("Depth", depth, i)
+
+            with torch.no_grad():
+                render_pose = poses_tensor[0]
+                print('render_pose:', render_pose)
+                rgb8, depth = render_path_logger(render_pose, hwf, args.chunk, render_kwargs_test, sc=sc,
+                                        depth_priors=torch.from_numpy(depth_priors).to(device),
+                                        depth_confidences=torch.from_numpy(depth_confidences).to(device), 
+                                        savedir=None, render_factor=args.render_factor, 
+                                        image_list=image_list)
+                # writer.add_image("Image RGB GT")
+                writer.add_image("Image rendered", rgb8, i)
+                writer.add_image("Depth", depth, i)
         
         global_step += 1
     
