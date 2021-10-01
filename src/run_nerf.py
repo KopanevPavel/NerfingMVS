@@ -23,6 +23,26 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 np.random.seed(0)
 DEBUG = False
 
+def render_path_logger(render_pose, hwf, chunk, render_kwargs, image_list, sc,
+                depth_priors=None, depth_confidences=None, savedir=None, render_factor=0):
+
+    H, W, focal = hwf
+
+    if render_factor!=0:
+        # Render downsampled for speed
+        H = H//render_factor
+        W = W//render_factor
+        focal = focal/render_factor
+
+    c2w = render_pose
+    i = 0
+
+    rgb, disp, acc, depth, _ = render(H, W, focal, depth_priors=depth_priors[i], depth_confidences=depth_confidences[i], chunk=chunk, c2w=c2w[:3,:4], **render_kwargs)
+    print(rgb.shape, disp.shape)
+    rgb8 = to8b(rgb.cpu().numpy())
+    depth = depth.cpu().numpy()
+
+    return rgb8, depth
 
 def batchify(fn, chunk):
     """Constructs a version of 'fn' that applies to smaller batches.
@@ -600,6 +620,16 @@ def train(args):
             tqdm.write(f"[TRAIN] Iter: {i} Loss: {loss.item()}  PSNR: {psnr.item()}")
             writer.add_scalar("Loss", loss.item(), i)
             writer.add_scalar("PSNR", psnr.item(), i)
+            with torch.no_grad():
+                render_pose = poses_tensor[0]
+                rgb8, depth = render_path_logger(render_pose, hwf, args.chunk, render_kwargs_test, sc=sc,
+                                          depth_priors=torch.from_numpy(depth_priors).to(device),
+                                          depth_confidences=torch.from_numpy(depth_confidences).to(device), 
+                                          render_factor=args.render_factor, 
+                                          image_list=image_list)
+                # writer.add_image("Image RGB GT")
+                writer.add_image("Image rendered", rgb8, i)
+                writer.add_image("Depth", depth, i)
         
         global_step += 1
     
