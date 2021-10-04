@@ -460,6 +460,9 @@ def train(args):
     
     image_list = load_img_list(args.datadir, load_test=load_test)
     colmap_depths, colmap_masks = load_colmap(image_list, args.datadir, H, W)
+
+    np.save("colmap_depths.npy", colmap_depths)
+    np.save("colmap_masks.npy", colmap_masks)
    
     image_list_train = load_img_list(args.datadir, load_test=False)
     depth_priors = load_depths(image_list_train,
