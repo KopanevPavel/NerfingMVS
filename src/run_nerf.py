@@ -178,6 +178,8 @@ def render_path(render_poses, hwf, chunk, render_kwargs, image_list, sc,
     disps = []
     depths = []
 
+    print(render_poses)
+
     for i, c2w in enumerate(tqdm(render_poses)):
         rgb, disp, acc, depth, _ = render(H, W, focal, depth_priors=depth_priors[i], depth_confidences=depth_confidences[i], chunk=chunk, c2w=c2w[:3,:4], **render_kwargs)
         rgbs.append(rgb.cpu().numpy())
