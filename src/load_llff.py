@@ -275,8 +275,12 @@ def load_llff_data(basedir, factor=8, recenter=True, bd_factor=.75, spherify=Fal
     poses[:,:3,3] *= sc
     bds *= sc
 
+    print(poses)
+    print('___________')
+
     if recenter:
         poses = recenter_poses(poses)
+
 
     if spherify:
         poses, render_poses, bds, sc_spherify = spherify_poses(poses, bds, N_views)
@@ -288,6 +292,8 @@ def load_llff_data(basedir, factor=8, recenter=True, bd_factor=.75, spherify=Fal
         radius_ = 3
         n_points_ = 60
         render_poses = gen_circle(radius_, n_points_, R_)
+
+        print(render_poses)
     
     else:
 
