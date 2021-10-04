@@ -152,8 +152,8 @@ def render(H, W, focal, chunk=1024*32, rays=None, c2w=None, ndc=True,
         k_sh = list(sh[:-1]) + list(all_ret[k].shape[1:])
         all_ret[k] = torch.reshape(all_ret[k], k_sh)
 
-    if ndc:
-        all_ret['depth_map'] = -1/rays_d_ori[:, 2]*(1 / (1 - all_ret['depth_map']) + rays_o_ori[:, 2])
+    # if ndc:
+        # all_ret['depth_map'] = -1/rays_d_ori[:, 2]*(1 / (1 - all_ret['depth_map']) + rays_o_ori[:, 2])
 
     k_extract = ['rgb_map', 'disp_map', 'acc_map', 'depth_map']
     ret_list = [all_ret[k] for k in k_extract]
@@ -621,17 +621,17 @@ def train(args):
             writer.add_scalar("Loss", loss.item(), i)
             writer.add_scalar("PSNR", psnr.item(), i)
 
-            with torch.no_grad():
-                render_pose = poses_tensor[0]
-                print('render_pose:', render_pose)
-                rgb8, depth = render_path_logger(render_pose, hwf, args.chunk, render_kwargs_test, sc=sc,
-                                        depth_priors=torch.from_numpy(depth_priors).to(device),
-                                        depth_confidences=torch.from_numpy(depth_confidences).to(device), 
-                                        savedir=None, render_factor=args.render_factor, 
-                                        image_list=image_list)
+            # with torch.no_grad():
+            #     render_pose = poses_tensor[0]
+            #     print('render_pose:', render_pose)
+            #     rgb8, depth = render_path_logger(render_pose, hwf, args.chunk, render_kwargs_test, sc=sc,
+            #                             depth_priors=torch.from_numpy(depth_priors).to(device),
+            #                             depth_confidences=torch.from_numpy(depth_confidences).to(device), 
+            #                             savedir=None, render_factor=args.render_factor, 
+            #                             image_list=image_list)
                 # writer.add_image("Image RGB GT")
-                writer.add_image("Image rendered", rgb8, i)
-                writer.add_image("Depth", depth, i)
+            #     writer.add_image("Image rendered", rgb8, i)
+            #     writer.add_image("Depth", depth, i)
         
         global_step += 1
     

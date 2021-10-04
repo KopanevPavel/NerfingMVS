@@ -50,7 +50,7 @@ def _minify(basedir, factors=[], resolutions=[]):
         check_output('cp {}/* {}'.format(imgdir_orig, imgdir), shell=True)
 
         ext = imgs[0].split('.')[-1]
-        args = ' '.join(['mogrify', '-resize', resizearg, '-format', 'jpg', '*.{}'.format(ext)])
+        args = ' '.join(['mogrify', '-resize', resizearg, '-format', 'png', '*.{}'.format(ext)])
         print(args)
         os.chdir(imgdir)
         check_output(args, shell=True)
@@ -104,7 +104,7 @@ def _load_data(basedir, factor=None, width=None, height=None, load_imgs=True):
         with open(os.path.join(basedir, 'test.txt'), 'r') as f_list:
             lines += f_list.readlines()
             
-    imgfiles = [os.path.join(imgdir, f.strip()) for f in lines]
+    imgfiles = [os.path.join(imgdir, f.strip().replace('.jpg', '.png')) for f in lines]
     if poses.shape[-1] != len(imgfiles):
         print( 'Mismatch between imgs {} and poses {} !!!!'.format(len(imgfiles), poses.shape[-1]) )
         return
