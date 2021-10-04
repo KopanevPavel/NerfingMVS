@@ -9,6 +9,9 @@ __pycache__/
 data/
 logs/
 
+colmap_depths.npy
+colmap_masks.npy
+
 # Distribution / packaging
 .Python
 build/
