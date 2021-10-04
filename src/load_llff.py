@@ -352,7 +352,7 @@ def load_llff_data(basedir, factor=8, recenter=True, bd_factor=.75, spherify=Fal
             i_test = list(np.arange(len(lines)) + len(i_train))
     else:
         # i_test = []
-        i_test = list(np.arange(len(i_train) + n_points))
+        i_test = list(np.arange(len(i_train), len(i_train) + n_points))
 
     poses = np.concatenate((poses, render_poses), axis=0)
         
