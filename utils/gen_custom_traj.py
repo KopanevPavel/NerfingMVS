@@ -5,7 +5,7 @@ from scipy import interpolate
 from sklearn.decomposition import PCA 
 
 
-def gen_circle(radius, num_points, R):
+def gen_circle(radius, num_points, R, hwf):
   ps = np.arange(num_points)
   pts = (np.exp(2j*np.pi/num_points)**ps*radius)
 
@@ -13,9 +13,11 @@ def gen_circle(radius, num_points, R):
   for x, z in zip(pts.real, pts.imag):
     t = np.array([x, 0, z])
 
-    transformation = np.zeros((3,4))
+    transformation = np.zeros((3,5))
     transformation[:, :3] = R
     transformation[:, 3] = t
+
+    transformation[:, 4] = hwf
 
     transfromations += [transformation]
 

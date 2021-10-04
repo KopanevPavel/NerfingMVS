@@ -292,7 +292,8 @@ def load_llff_data(basedir, factor=8, recenter=True, bd_factor=.75, spherify=Fal
         R_ = poses[0, :3, :3]
         radius_ = 3
         n_points_ = n_points
-        render_poses = gen_circle(radius_, n_points_, R_)
+        hwf_ = poses[0, :, 4]
+        render_poses = gen_circle(radius_, n_points_, R_, hwf_)
 
         # print(render_poses)
     
