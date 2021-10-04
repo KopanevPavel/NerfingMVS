@@ -1,6 +1,7 @@
 import numpy as np
 import os, imageio
 import pdb
+from utils.gen_custom_traj import *
 
 ########## Slightly modified version of LLFF data loading code
 ##########  see https://github.com/Fyusion/LLFF for original
@@ -281,6 +282,13 @@ def load_llff_data(basedir, factor=8, recenter=True, bd_factor=.75, spherify=Fal
         poses, render_poses, bds, sc_spherify = spherify_poses(poses, bds, N_views)
         sc *= sc_spherify
 
+    elif True:
+        print("Generating circle!!")
+        R_ = poses[0, :3, :3]
+        radius_ = 3
+        n_points_ = 60
+        render_poses = gen_circle(radius_, n_points_, R_)
+    
     else:
 
         c2w = poses_avg(poses)

@@ -18,6 +18,7 @@ from options import config_parser
 from .load_llff import load_llff_data
 from utils.io_utils import *
 from utils.nerf_utils import *
+from utils.gen_custom_traj import *
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 np.random.seed(0)
