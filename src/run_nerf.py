@@ -453,7 +453,7 @@ def train(args):
         load_test = False
         
     hwf = poses[0,:3,-1]
-    poses = render_poses
+    # poses = render_poses
     poses = poses[:,:3,:4]
     print('Loaded llff', images.shape, render_poses.shape, hwf, args.datadir)
 
@@ -520,8 +520,8 @@ def train(args):
             if args.render_test:
                 testsavedir = os.path.join(save_path, 'results', 
                                            'renderonly_{}_{:06d}'.format('test', start))
-                # render_poses = poses_tensor[i_test]
-                render_poses = poses_tensor
+                render_poses = poses_tensor[i_test]
+                # render_poses = poses_tensor
             else:
                 testsavedir = os.path.join(save_path, 'results', 
                                            'renderonly_{}_{:06d}'.format('train', start))

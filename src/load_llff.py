@@ -275,8 +275,9 @@ def load_llff_data(basedir, factor=8, recenter=True, bd_factor=.75, spherify=Fal
     poses[:,:3,3] *= sc
     bds *= sc
 
-    print(poses)
-    print('___________')
+    # print(poses)
+    # print('___________')
+    n_points = 60
 
     if recenter:
         poses = recenter_poses(poses)
@@ -290,10 +291,10 @@ def load_llff_data(basedir, factor=8, recenter=True, bd_factor=.75, spherify=Fal
         print("Generating circle!!")
         R_ = poses[0, :3, :3]
         radius_ = 3
-        n_points_ = 60
+        n_points_ = n_points
         render_poses = gen_circle(radius_, n_points_, R_)
 
-        print(render_poses)
+        # print(render_poses)
     
     else:
 
@@ -350,7 +351,10 @@ def load_llff_data(basedir, factor=8, recenter=True, bd_factor=.75, spherify=Fal
             lines = f_list.readlines()
             i_test = list(np.arange(len(lines)) + len(i_train))
     else:
-        i_test = []
+        # i_test = []
+        i_test = list(np.arange(len(i_train) + n_points))
+
+    poses = np.concatenate((poses, render_poses), axis=0)
         
     return images, poses, bds, render_poses, i_train, i_test, sc
 
