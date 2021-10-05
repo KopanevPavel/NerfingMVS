@@ -178,6 +178,14 @@ def render_path(render_poses, hwf, chunk, render_kwargs, image_list, sc,
     disps = []
     depths = []
 
+    print('DEPTH PRIORS')
+    print(depth_priors)
+    print(depth_priors.shape)
+
+    print('DEPTH CONFIDENCES')
+    print(depth_confidences)
+    print(depth_confidences.shape)
+
     # print(render_poses)
 
     for i, c2w in enumerate(tqdm(render_poses)):
@@ -475,9 +483,9 @@ def train(args):
     depth_priors = align_scales(depth_priors, colmap_depths, colmap_masks, 
                                 poses, sc, i_train, i_test)
 
-    print('DEPTH PRIORS')
+    """print('DEPTH PRIORS')
     print(depth_priors)
-    print(depth_priors.shape)
+    print(depth_priors.shape)"""
 
     poses_tensor = torch.from_numpy(poses).to(device)
     K = torch.FloatTensor([[focal, 0, -W / 2.0, 0],
@@ -494,9 +502,9 @@ def train(args):
     depth_confidences = cal_depth_confidences(torch.from_numpy(depth_priors).to(device), 
                                               T, K, i_train, args.topk)
 
-    print('DEPTH CONFIDENCES')
+    """print('DEPTH CONFIDENCES')
     print(depth_confidences)
-    print(depth_confidences.shape)
+    print(depth_confidences.shape)"""
     
     print('DEFINING BOUNDS')
     if args.no_ndc:
