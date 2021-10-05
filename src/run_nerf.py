@@ -197,7 +197,7 @@ def render_path(render_poses, hwf, chunk, render_kwargs, image_list, sc,
             print(rgb.shape, disp.shape)
 
 
-        if savedir is not None:
+        """if savedir is not None:
             rgb8 = to8b(rgbs[-1])
             frame_id = image_list[i].split('.')[0]
             filename = os.path.join(savedir, '{}.png'.format(frame_id))
@@ -206,6 +206,17 @@ def render_path(render_poses, hwf, chunk, render_kwargs, image_list, sc,
             np.save(filename, depth.cpu().numpy() / sc)
             disp_visual = visualize_depth(depth.cpu().numpy())
             filename = os.path.join(savedir, '{}_depth.png'.format(frame_id))
+            cv2.imwrite(filename, disp_visual)"""
+
+        if savedir is not None:
+            rgb8 = to8b(rgbs[-1])
+            frame_id = image_list[i].split('.')[0]
+            filename = os.path.join(savedir, str(i) + '.png')
+            imageio.imwrite(filename, rgb8)
+            filename = os.path.join(savedir, str(i) + '_depth.npy')
+            np.save(filename, depth.cpu().numpy() / sc)
+            disp_visual = visualize_depth(depth.cpu().numpy())
+            filename = os.path.join(savedir, str(i) + '_depth.png')
             cv2.imwrite(filename, disp_visual)
 
 
