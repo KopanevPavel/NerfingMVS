@@ -544,7 +544,8 @@ def train(args):
                 render_poses = poses_tensor[i_train]
 
             os.makedirs(testsavedir, exist_ok=True)
-            rgbs, disps, depths = render_path(render_poses, hwf, args.chunk, render_kwargs_test, sc=sc, depth_priors=depth_priors, depth_confidences=depth_confidences,
+            rgbs, disps, depths = render_path(render_poses, hwf, args.chunk, render_kwargs_test, sc=sc, depth_priors=torch.from_numpy(depth_priors).to(device),
+                                              depth_confidences=torch.from_numpy(depth_confidences).to(device),
                                               savedir=testsavedir, render_factor=args.render_factor, 
                                               image_list=image_list)
             print('Done rendering', testsavedir)
