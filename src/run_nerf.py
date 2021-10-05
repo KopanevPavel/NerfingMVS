@@ -178,7 +178,7 @@ def render_path(render_poses, hwf, chunk, render_kwargs, image_list, sc,
     disps = []
     depths = []
 
-    print(render_poses)
+    # print(render_poses)
 
     for i, c2w in enumerate(tqdm(render_poses)):
         rgb, disp, acc, depth, _ = render(H, W, focal, depth_priors=depth_priors[i], depth_confidences=depth_confidences[i], chunk=chunk, c2w=c2w[:3,:4], **render_kwargs)
@@ -461,7 +461,7 @@ def train(args):
     H, W = int(H), int(W)
     hwf = [H, W, focal]
     
-    image_list = load_img_list(args.datadir, load_test=load_test)
+    image_list = load_img_list(args.datadir, load_test=False)
     colmap_depths, colmap_masks = load_colmap(image_list, args.datadir, H, W)
 
     np.save("colmap_depths.npy", colmap_depths)
@@ -471,9 +471,13 @@ def train(args):
     depth_priors = load_depths(image_list_train,
                         os.path.join(args.basedir, args.expname, 'depth_priors', 'results'), 
                         H, W)
-    
+
     depth_priors = align_scales(depth_priors, colmap_depths, colmap_masks, 
                                 poses, sc, i_train, i_test)
+
+    print('DEPTH PRIORS')
+    print(depth_priors)
+    print(depth_priors.shape)
 
     poses_tensor = torch.from_numpy(poses).to(device)
     K = torch.FloatTensor([[focal, 0, -W / 2.0, 0],
@@ -490,6 +494,10 @@ def train(args):
     depth_confidences = cal_depth_confidences(torch.from_numpy(depth_priors).to(device), 
                                               T, K, i_train, args.topk)
 
+    print('DEPTH CONFIDENCES')
+    print(depth_confidences)
+    print(depth_confidences.shape)
+    
     print('DEFINING BOUNDS')
     if args.no_ndc:
         near = np.ndarray.min(bds) * .9
